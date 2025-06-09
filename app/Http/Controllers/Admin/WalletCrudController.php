@@ -55,6 +55,10 @@ class WalletCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (!backpack_user()->hasRole('super-admin')) {
+            CRUD::addClause('where', 'user_id', backpack_user()->id);
+        }
+
         CRUD::addColumn([
             'name'        => 'user_id',
             'type'        => 'select2',

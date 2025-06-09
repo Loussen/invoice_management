@@ -157,7 +157,7 @@ class OrderCrudController extends CrudController
             'label' => 'Company',
         ],
             function () use ($adminId) {
-                return Company::pluck('name', 'id')->toArray();
+                return AdminCustomerHelper::getCompanyOptions($adminId);
             },
             function ($value) {
                 $this->crud->addClause('where', 'company_id', $value);

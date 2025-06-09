@@ -73,10 +73,10 @@ class AdminCustomerHelper
         } else {
             // Get company IDs for the assigned customers
             $companyIds = DB::table('user_company as uc')
-                ->join('company as c', 'uc.company_id', '=', 'c.id')
+                ->join('companies as c', 'uc.company_id', '=', 'c.id')
                 ->join('orders as o', 'c.id', '=', 'o.company_id')
                 ->where('uc.user_id', $adminId)
-                ->pluck('co.id');
+                ->pluck('o.id');
 
             return $type == 'create' ? Company::whereIn('id', $companyIds)->get() : Company::whereIn('id', $companyIds)->pluck('name', 'id')->toArray();
         }
