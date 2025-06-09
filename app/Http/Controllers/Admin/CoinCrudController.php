@@ -29,6 +29,22 @@ class CoinCrudController extends CrudController
         CRUD::setModel(\App\Models\Coin::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/coin');
         CRUD::setEntityNameStrings('coin', 'coins');
+
+        if (!backpack_user()->can('coin list')) {
+            CRUD::denyAccess(['list', 'show']);
+        }
+
+        if (!backpack_user()->can('coin create')) {
+            CRUD::denyAccess(['create']);
+        }
+
+        if (!backpack_user()->can('coin update')) {
+            CRUD::denyAccess(['update']);
+        }
+
+        if (!backpack_user()->can('coin delete')) {
+            CRUD::denyAccess(['delete']);
+        }
     }
 
     /**

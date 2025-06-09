@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\AdminCustomerHelper;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Currency;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -33,6 +34,26 @@ class CompanyCrudController extends CrudController
         CRUD::setModel(\App\Models\Company::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/company');
         CRUD::setEntityNameStrings('company', 'companies');
+
+        if (!backpack_user()->can('company list')) {
+            CRUD::denyAccess(['list', 'show']);
+        }
+
+        if (!backpack_user()->can('company create')) {
+            CRUD::denyAccess(['create']);
+        }
+
+        if (!backpack_user()->can('company update')) {
+            CRUD::denyAccess(['update']);
+        }
+
+        if (!backpack_user()->can('company delete')) {
+            CRUD::denyAccess(['delete']);
+        }
+
+        $adminId = backpack_user()->id;
+
+        AdminCustomerHelper::applyAdminCustomerFilter($this->crud->query, $adminId);
     }
 
     /**

@@ -35,21 +35,21 @@ class UserCrudController extends CrudController
         $this->crud->setEntityNameStrings(trans('backpack::permissionmanager.user'), trans('backpack::permissionmanager.users'));
         $this->crud->setRoute(backpack_url('user'));
 
-//        if (!backpack_user()->can('user list')) {
-//            CRUD::denyAccess(['list', 'show']);
-//        }
-//
-//        if (!backpack_user()->can('user create')) {
-//            CRUD::denyAccess(['create']);
-//        }
-//
-//        if (!backpack_user()->can('user update')) {
-//            CRUD::denyAccess(['update']);
-//        }
-//
-//        if (!backpack_user()->can('user delete')) {
-//            CRUD::denyAccess(['delete']);
-//        }
+        if (!backpack_user()->can('user list')) {
+            CRUD::denyAccess(['list', 'show']);
+        }
+
+        if (!backpack_user()->can('user create')) {
+            CRUD::denyAccess(['create']);
+        }
+
+        if (!backpack_user()->can('user update')) {
+            CRUD::denyAccess(['update']);
+        }
+
+        if (!backpack_user()->can('user delete')) {
+            CRUD::denyAccess(['delete']);
+        }
     }
 
     /**
