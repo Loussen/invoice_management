@@ -64,9 +64,9 @@ class CompanyCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name');
+        CRUD::column('name')->label('Company name');
         CRUD::column('iban')->label('IBAN');
-        CRUD::column('address');
+        CRUD::column('address')->label('Company address');
         CRUD::column('swift')->label('SWIFT / BIC');
         CRUD::column('bank_name');
         CRUD::column('country');
@@ -105,9 +105,9 @@ class CompanyCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(CompanyRequest::class);
-        CRUD::field('name')->wrapper(['class' => 'form-group col-md-3']);
+        CRUD::field('name')->label('Company name')->wrapper(['class' => 'form-group col-md-3']);
         CRUD::field('iban')->label('IBAN')->wrapper(['class' => 'form-group col-md-3']);
-        CRUD::field('address')->wrapper(['class' => 'form-group col-md-6']);
+        CRUD::field('address')->label('Company address')->wrapper(['class' => 'form-group col-md-6']);
         CRUD::field('swift')->label('SWIFT / BIC')->wrapper(['class' => 'form-group col-md-4']);
         CRUD::field('bank_name')->wrapper(['class' => 'form-group col-md-4']);
         CRUD::field('country')->wrapper(['class' => 'form-group col-md-4']);

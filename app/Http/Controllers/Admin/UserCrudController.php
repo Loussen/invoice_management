@@ -252,6 +252,17 @@ class UserCrudController extends CrudController
                 'pivot'     => true,
             ],
             [
+                'label'     => 'Commission',
+                'name'      => 'commission',
+                'type'      => 'number',
+                'prefix'    => '%'
+            ],
+            [
+                'label'     => 'Comment (note)',
+                'name'      => 'comment',
+                'type'      => 'textarea',
+            ],
+            [
                 // two interconnected entities
                 'label'             => trans('backpack::permissionmanager.user_role_permission'),
                 'field_unique_name' => 'user_role_permission',
