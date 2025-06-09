@@ -29,7 +29,54 @@
     $admin = \App\Models\User::find($adminId);
     if($admin) {
         if($admin->hasRole('Super Admin')) {
-            echo "";
+            $orderCount = \App\Models\Order::count();
+
+            $orderAmountSum = \App\Models\Order::sum('amount');
+
+            $companyCount = \App\Models\Company::count();
+            $walletCount = \App\Models\Wallet::where('user_id',$adminId)->count();
+            Widget::add()->to('before_content')->type('div')->class('row mt-4')->content([
+                // notice we use Widget::make() to add widgets as content (not in a group)
+                Widget::make()
+                    ->type('progress')
+                    ->class('card mb-4')
+                    ->statusBorder('start') // start|top|bottom
+                    ->accentColor('success') // primary|secondary|warning|danger|info
+                    ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                    ->progressClass('progress-bar')
+                    ->value($orderCount.' orders')
+                    ->description('Orders count'),
+                // alternatively, to use widgets as content, we can use the same add() method,
+                // but we need to use onlyHere() or remove() at the end
+                Widget::make()
+                    ->type('progress')
+                    ->class('card mb-4')
+                    ->statusBorder('start') // start|top|bottom
+                    ->accentColor('info') // primary|secondary|warning|danger|info
+                    ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                    ->progressClass('progress-bar')
+                    ->value($companyCount.' company')
+                    ->description('Company count'),
+                // alternatively, you can just push the widget to a "hidden" group
+                Widget::make()
+                    ->type('progress')
+                    ->class('card mb-4')
+                    ->statusBorder('start') // start|top|bottom
+                    ->accentColor('danger') // primary|secondary|warning|danger|info
+                    ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                    ->progressClass('progress-bar')
+                    ->value($orderAmountSum)
+                    ->description('Wallet Balance'),
+                Widget::make()
+                    ->type('progress')
+                    ->class('card mb-4')
+                    ->statusBorder('start') // start|top|bottom
+                    ->accentColor('primary') // primary|secondary|warning|danger|info
+                    ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                    ->progressClass('progress-bar')
+                    ->value($walletCount)
+                    ->description('Wallet Count'),
+            ]);
         } else {
             $companyIds = $admin->companies()->pluck('companies.id');
 
@@ -37,8 +84,11 @@
                 $orderCount = \App\Models\Order::whereIn('company_id', $companyIds)->count();
 
                 $orderAmountSum = \App\Models\Order::whereIn('company_id', $companyIds)->sum('amount');
+                $commissionRate = $admin->commission / 100;
+                $orderAmountSumAfterCommission = $orderAmountSum * (1 - $commissionRate);
 
                 $companyCount = $companyIds->count();
+                $walletCount = \App\Models\Wallet::where('user_id',$adminId)->count();
 
                 Widget::add()->to('before_content')->type('div')->class('row mt-4')->content([
                     // notice we use Widget::make() to add widgets as content (not in a group)
@@ -57,7 +107,7 @@
                         ->type('progress')
                         ->class('card mb-4')
                         ->statusBorder('start') // start|top|bottom
-                        ->accentColor('success') // primary|secondary|warning|danger|info
+                        ->accentColor('info') // primary|secondary|warning|danger|info
                         ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                         ->progressClass('progress-bar')
                         ->value($companyCount.' company')
@@ -67,14 +117,23 @@
                         ->type('progress')
                         ->class('card mb-4')
                         ->statusBorder('start') // start|top|bottom
-                        ->accentColor('success') // primary|secondary|warning|danger|info
+                        ->accentColor('danger') // primary|secondary|warning|danger|info
                         ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                         ->progressClass('progress-bar')
-                        ->value($orderAmountSum)
-                        ->description('Balance'),
+                        ->value($orderAmountSumAfterCommission)
+                        ->description('Wallet Balance'),
+                    Widget::make()
+                        ->type('progress')
+                        ->class('card mb-4')
+                        ->statusBorder('start') // start|top|bottom
+                        ->accentColor('primary') // primary|secondary|warning|danger|info
+                        ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                        ->progressClass('progress-bar')
+                        ->value($walletCount)
+                        ->description('Wallet Count'),
             ]);
             } else {
-                echo "sadas";
+                echo "Not yet";
             }
         }
     }

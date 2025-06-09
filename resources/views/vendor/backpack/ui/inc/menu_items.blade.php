@@ -10,8 +10,10 @@
 
 <x-backpack::menu-item title="Wallets" icon="la la-wallet" :link="backpack_url('wallet')" />
 <x-backpack::menu-item title="Versions" icon="la la-code-branch" :link="backpack_url('version')" />
-<x-backpack::menu-dropdown title="Users & Roles" icon="la la-puzzle-piece">
-    <x-backpack::menu-dropdown-item title="Users" icon="la la-user" :link="backpack_url('user')" />
-    <x-backpack::menu-dropdown-item title="Roles" icon="la la-group" :link="backpack_url('role')" />
-    <x-backpack::menu-dropdown-item title="Permissions" icon="la la-key" :link="backpack_url('permission')" />
-</x-backpack::menu-dropdown>
+@if(backpack_user()->hasRole('Super Admin'))
+    <x-backpack::menu-dropdown title="Users & Roles" icon="la la-puzzle-piece">
+        <x-backpack::menu-dropdown-item title="Users" icon="la la-user" :link="backpack_url('user')" />
+        <x-backpack::menu-dropdown-item title="Roles" icon="la la-group" :link="backpack_url('role')" />
+        <x-backpack::menu-dropdown-item title="Permissions" icon="la la-key" :link="backpack_url('permission')" />
+    </x-backpack::menu-dropdown>
+@endif
