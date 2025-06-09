@@ -30,13 +30,12 @@ return [
     | - creating and updating should be disabled
     */
 
-    'allow_permission_create' => backpack_user()?->hasRole('Super Admin'),
-    'allow_permission_update' => backpack_user()?->hasRole('Super Admin'),
-    'allow_permission_delete' => backpack_user()?->hasRole('Super Admin'),
-
-    'allow_role_create' => backpack_user()?->hasRole('Super Admin'),
-    'allow_role_update' => backpack_user()?->hasRole('Super Admin'),
-    'allow_role_delete' => backpack_user()?->hasRole('Super Admin'),
+    'allow_permission_create' => true,
+    'allow_permission_update' => true,
+    'allow_permission_delete' => true,
+    'allow_role_create'       => true,
+    'allow_role_update'       => true,
+    'allow_role_delete'       => true,
 
     /*
     |--------------------------------------------------------------------------
