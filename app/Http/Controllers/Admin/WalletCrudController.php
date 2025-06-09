@@ -74,6 +74,11 @@ class WalletCrudController extends CrudController
             'attribute'   => 'full_name',
         ]);
         CRUD::column('address');
+        CRUD::addColumn([
+            'name' => 'status',
+            'type' => 'select_from_array',
+            'options' => ['pending' => 'Pending', 'approved' => 'Approved'],
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -124,6 +129,12 @@ class WalletCrudController extends CrudController
                 'options' => ['pending' => 'Pending', 'approved' => 'Approved'],
                 'allows_null' => true,
                 'wrapper' => ['class' => 'form-group col-md-6']
+            ]);
+        } else {
+            CRUD::addField([
+                'name'  => 'status',
+                'type'  => 'hidden',
+                'value' => 'pending',
             ]);
         }
 
