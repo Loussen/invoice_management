@@ -18,7 +18,9 @@ Route::group([
         (array) config('backpack.base.middleware_key', 'admin')
     ),
 ], function () {
+
     Route::crud('permission', 'PermissionCrudController');
     Route::crud('role', 'RoleCrudController');
     Route::crud('user', 'UserCrudController');
+    
 });
