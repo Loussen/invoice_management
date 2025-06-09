@@ -22,7 +22,8 @@ Route::group([
     Route::crud('coin', 'CoinCrudController');
     Route::crud('wallet', 'WalletCrudController');
     Route::crud('version', 'VersionCrudController');
-    Route::crud('user', 'UserCrudController');
+//    Route::crud('user', 'UserCrudController');
+    Route::crud('user-company', 'UserCompanyCrudController');
 }); // this should be the absolute last line of this file
 
 /**

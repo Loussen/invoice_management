@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
     use CrudTrait;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -54,8 +56,8 @@ class User extends Authenticatable
         return $this->attributes['name']. " - " . $this->attributes['email'];
     }
 
-    public function company(): BelongsTo
+    public function companies()
     {
-        return $this->belongsTo('App\Models\Company','company_id','id');
+        return $this->belongsToMany(Company::class, 'user_company', 'user_id', 'company_id');
     }
 }

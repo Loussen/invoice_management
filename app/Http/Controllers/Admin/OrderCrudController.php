@@ -42,7 +42,26 @@ class OrderCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::addColumn([
+            'name'        => 'company_id',
+            'type'        => 'select2',
+            'allows_null' => true,
+        ]);
+        CRUD::addColumn([
+            'name' => 'status',
+            'type' => 'select_from_array',
+            'options' => ['pending' => 'Pending', 'completed' => 'Completed', 'refund' => 'Refund', 'reject' => 'Reject'],
+            'allows_null' => true,
+        ]);
+        CRUD::column('transaction_number');
+        CRUD::column('amount')->type('number');
+        CRUD::column('payeer_name');
+        CRUD::addColumn([
+            'name' => 'detail_document',
+            'type' => 'dropzone',
+            'disk' => 'order_detail_document',
+            'withFiles'    => true,
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -97,5 +116,10 @@ class OrderCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function autoSetupShowOperation()
+    {
+        $this->setupListOperation();
     }
 }

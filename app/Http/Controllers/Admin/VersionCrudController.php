@@ -42,7 +42,8 @@ class VersionCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::column('title');
+        CRUD::column('description')->type('tinymce');
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -77,5 +78,10 @@ class VersionCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function autoSetupShowOperation()
+    {
+        $this->setupListOperation();
     }
 }
