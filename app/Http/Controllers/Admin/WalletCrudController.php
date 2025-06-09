@@ -55,16 +55,18 @@ class WalletCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        if (!backpack_user()->hasRole('super-admin')) {
+        if (!backpack_user()->hasRole('Super Admin')) {
             CRUD::addClause('where', 'user_id', backpack_user()->id);
         }
 
-        CRUD::addColumn([
-            'name'        => 'user_id',
-            'type'        => 'select2',
-            'allows_null' => true,
-            'attribute'   => 'full_name',
-        ]);
+        if (backpack_user()->hasRole('Super Admin')) {
+            CRUD::addColumn([
+                'name' => 'user_id',
+                'type' => 'select2',
+                'allows_null' => true,
+                'attribute' => 'full_name',
+            ]);
+        }
         CRUD::addColumn([
             'name'        => 'coin_id',
             'type'        => 'select2',
@@ -88,13 +90,24 @@ class WalletCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(WalletRequest::class);
-        CRUD::addField([
-            'name'        => 'user_id',
-            'type'        => 'select2',
-            'allows_null' => true,
-            'attribute'   => 'full_name',
-            'wrapper'     => ['class' => 'form-group col-md-6']
-        ]);
+        if (backpack_user()->hasRole('Super Admin')) {
+            CRUD::addField([
+                'name'        => 'user_id',
+                'type'        => 'select2',
+                'entity'      => 'user',
+                'model'       => \App\Models\User::class,
+                'attribute'   => 'full_name', // və ya 'name'
+                'allows_null' => false,
+                'wrapper'     => ['class' => 'form-group col-md-6'],
+            ]);
+        } else {
+            // adi istifadəçidə user_id gizlədilir və dəyər avtomatik verilir
+            CRUD::addField([
+                'name'  => 'user_id',
+                'type'  => 'hidden',
+                'value' => backpack_user()->id,
+            ]);
+        }
         CRUD::addField([
             'name'        => 'coin_id',
             'type'        => 'select2',
@@ -102,7 +115,17 @@ class WalletCrudController extends CrudController
             'attribute'   => 'full_name',
             'wrapper'     => ['class' => 'form-group col-md-6']
         ]);
-        CRUD::field('address');
+        CRUD::field('address')->wrapper(['class' => 'form-group col-md-6']);
+
+        if (backpack_user()->hasRole('Super Admin')) {
+            CRUD::addField([
+                'name' => 'status',
+                'type' => 'select_from_array',
+                'options' => ['pending' => 'Pending', 'approved' => 'Approved'],
+                'allows_null' => true,
+                'wrapper' => ['class' => 'form-group col-md-6']
+            ]);
+        }
 
         /**
          * Fields can be defined using the fluent syntax:
