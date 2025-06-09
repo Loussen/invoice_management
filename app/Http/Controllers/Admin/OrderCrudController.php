@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\OrderRequest;
+use App\Models\Company;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\Pro\Http\Controllers\Operations\DropzoneOperation;
@@ -63,6 +64,8 @@ class OrderCrudController extends CrudController
             'withFiles'    => true,
         ]);
 
+        $this->addCustomCrudFilters();
+
         /**
          * Columns can be defined using the fluent syntax:
          * - CRUD::column('price')->type('number');
@@ -121,5 +124,73 @@ class OrderCrudController extends CrudController
     protected function autoSetupShowOperation()
     {
         $this->setupListOperation();
+    }
+
+    protected function addCustomCrudFilters(): void
+    {
+        CRUD::addFilter([
+            'name' => 'company_id',
+            'type' => 'select2',
+            'label' => 'Company',
+        ],
+            function () {
+                return Company::pluck('name', 'id')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'company_id', $value);
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'name'       => 'amount',
+                'type'       => 'range',
+                'label_from' => 'min',
+                'label_to'   => 'max',
+            ],
+            false,
+            function ($value) {
+                $range = json_decode($value);
+                if ($range->from) {
+                    CRUD::addClause('where', 'amount', '>=',  (float) $range->from);
+                }
+                if($range->to) {
+                    CRUD::addClause('where', 'amount', '<=', (float) $range->to);
+                }
+            }
+        );
+
+        CRUD::addFilter([
+            'name'  => 'status',
+            'type'  => 'select2',
+            'label' => 'Status'
+        ], function () {
+            return ['pending' => 'Pending', 'completed' => 'Completed', 'refund' => 'Refund', 'reject' => 'Reject'];
+        }, function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'status', $value);
+        });
+
+        CRUD::addFilter(
+            [
+                'type' => 'text',
+                'label' => 'Transaction Number',
+                'name' => 'transaction_number',
+            ],
+            false,
+            function ($value) {
+                CRUD::addClause('where', 'transaction_number', 'LIKE', "$value%");
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'type' => 'text',
+                'name' => 'payeer_name',
+            ],
+            false,
+            function ($value) {
+                CRUD::addClause('where', 'payeer_name', 'LIKE', "$value%");
+            }
+        );
     }
 }

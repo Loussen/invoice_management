@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\CompanyRequest;
+use App\Models\Currency;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\Pro\Http\Controllers\Operations\DropzoneOperation;
@@ -66,6 +67,7 @@ class CompanyCrudController extends CrudController
             'attribute'   => 'full_name',
         ]);
 
+        $this->addCustomCrudFilters();
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -127,5 +129,140 @@ class CompanyCrudController extends CrudController
     protected function autoSetupShowOperation()
     {
         $this->setupListOperation();
+    }
+
+    protected function addCustomCrudFilters(): void
+    {
+        $adminId = backpack_user()->id;
+
+        CRUD::addFilter(
+            [
+                'type' => 'text',
+                'label' => 'Name',
+                'name' => 'name',
+            ],
+            false,
+            function ($value) {
+                CRUD::addClause('where', 'name', 'LIKE', "$value%");
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'type' => 'text',
+                'label' => 'IBAN',
+                'name' => 'iban',
+            ],
+            false,
+            function ($value) {
+                CRUD::addClause('where', 'iban', 'LIKE', "$value%");
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'type' => 'text',
+                'label' => 'SWIFT/BIC',
+                'name' => 'swift',
+            ],
+            false,
+            function ($value) {
+                CRUD::addClause('where', 'iban', 'LIKE', "$value%");
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'type' => 'text',
+                'label' => 'Bank name',
+                'name' => 'bank_name',
+            ],
+            false,
+            function ($value) {
+                CRUD::addClause('where', 'bank_name', 'LIKE', "$value%");
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'type' => 'text',
+                'label' => 'Country',
+                'name' => 'country',
+            ],
+            false,
+            function ($value) {
+                CRUD::addClause('where', 'country', 'LIKE', "$value%");
+            }
+        );
+
+        CRUD::addFilter([
+            'name' => 'currency',
+            'type' => 'select2',
+            'label' => 'Currency',
+        ],
+            function () {
+                return Currency::pluck('name', 'id')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'currency_id', $value);
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'name'       => 'monthly_limit',
+                'type'       => 'range',
+                'label_from' => 'min',
+                'label_to'   => 'max',
+            ],
+            false,
+            function ($value) {
+                $range = json_decode($value);
+                if ($range->from) {
+                    CRUD::addClause('where', 'monthly_limit', '>=',  (float) $range->from);
+                }
+                if($range->to) {
+                    CRUD::addClause('where', 'monthly_limit', '<=', (float) $range->to);
+                }
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'name'       => 'daily_limit',
+                'type'       => 'range',
+                'label_from' => 'min',
+                'label_to'   => 'max',
+            ],
+            false,
+            function ($value) {
+                $range = json_decode($value);
+                if ($range->from) {
+                    CRUD::addClause('where', 'daily_limit', '>=',  (float) $range->from);
+                }
+                if($range->to) {
+                    CRUD::addClause('where', 'daily_limit', '<=', (float) $range->to);
+                }
+            }
+        );
+
+        CRUD::addFilter(
+            [
+                'name'       => 'max_limit',
+                'type'       => 'range',
+                'label_from' => 'min',
+                'label_to'   => 'max',
+            ],
+            false,
+            function ($value) {
+                $range = json_decode($value);
+                if ($range->from) {
+                    CRUD::addClause('where', 'max_limit', '>=',  (float) $range->from);
+                }
+                if($range->to) {
+                    CRUD::addClause('where', 'max_limit', '<=', (float) $range->to);
+                }
+            }
+        );
     }
 }
