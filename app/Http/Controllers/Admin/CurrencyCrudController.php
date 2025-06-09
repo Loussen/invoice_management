@@ -29,6 +29,22 @@ class CurrencyCrudController extends CrudController
         CRUD::setModel(\App\Models\Currency::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/currency');
         CRUD::setEntityNameStrings('currency', 'currencies');
+
+        if (!backpack_user()->can('currency list')) {
+            CRUD::denyAccess(['list', 'show']);
+        }
+
+        if (!backpack_user()->can('currency create')) {
+            CRUD::denyAccess(['create']);
+        }
+
+        if (!backpack_user()->can('currency update')) {
+            CRUD::denyAccess(['update']);
+        }
+
+        if (!backpack_user()->can('currency delete')) {
+            CRUD::denyAccess(['delete']);
+        }
     }
 
     /**

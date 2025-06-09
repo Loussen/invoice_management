@@ -32,6 +32,22 @@ class VersionCrudController extends CrudController
         CRUD::setModel(\App\Models\Version::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/version');
         CRUD::setEntityNameStrings('version', 'versions');
+
+        if (!backpack_user()->can('version list')) {
+            CRUD::denyAccess(['list', 'show']);
+        }
+
+        if (!backpack_user()->can('version create')) {
+            CRUD::denyAccess(['create']);
+        }
+
+        if (!backpack_user()->can('version update')) {
+            CRUD::denyAccess(['update']);
+        }
+
+        if (!backpack_user()->can('version delete')) {
+            CRUD::denyAccess(['delete']);
+        }
     }
 
     /**

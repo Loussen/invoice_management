@@ -29,6 +29,22 @@ class WalletCrudController extends CrudController
         CRUD::setModel(\App\Models\Wallet::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/wallet');
         CRUD::setEntityNameStrings('wallet', 'wallets');
+
+        if (!backpack_user()->can('wallet list')) {
+            CRUD::denyAccess(['list', 'show']);
+        }
+
+        if (!backpack_user()->can('wallet create')) {
+            CRUD::denyAccess(['create']);
+        }
+
+        if (!backpack_user()->can('wallet update')) {
+            CRUD::denyAccess(['update']);
+        }
+
+        if (!backpack_user()->can('wallet delete')) {
+            CRUD::denyAccess(['delete']);
+        }
     }
 
     /**

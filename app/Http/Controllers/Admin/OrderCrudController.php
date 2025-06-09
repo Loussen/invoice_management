@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\AdminCustomerHelper;
 use App\Http\Requests\OrderRequest;
 use App\Models\Company;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -33,6 +34,26 @@ class OrderCrudController extends CrudController
         CRUD::setModel(\App\Models\Order::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/order');
         CRUD::setEntityNameStrings('order', 'orders');
+
+        if (!backpack_user()->can('order list')) {
+            CRUD::denyAccess(['list', 'show']);
+        }
+
+        if (!backpack_user()->can('order create')) {
+            CRUD::denyAccess(['create']);
+        }
+
+        if (!backpack_user()->can('order update')) {
+            CRUD::denyAccess(['update']);
+        }
+
+        if (!backpack_user()->can('order delete')) {
+            CRUD::denyAccess(['delete']);
+        }
+
+        $adminId = backpack_user()->id;
+
+        AdminCustomerHelper::applyAdminCustomerFilter($this->crud->query, $adminId);
     }
 
     /**

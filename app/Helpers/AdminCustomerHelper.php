@@ -20,7 +20,7 @@ class AdminCustomerHelper
         }
 
         return $query->whereIn($companyColumn, function ($subQuery) use ($adminId) {
-            $subQuery->select('customer_id')
+            $subQuery->select('company_id')
                 ->from('user_company')
                 ->where('user_id', $adminId);
         });
