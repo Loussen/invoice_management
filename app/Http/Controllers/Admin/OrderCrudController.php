@@ -149,13 +149,15 @@ class OrderCrudController extends CrudController
 
     protected function addCustomCrudFilters(): void
     {
+        $adminId = backpack_user()->id;
+
         CRUD::addFilter([
             'name' => 'company_id',
             'type' => 'select2',
             'label' => 'Company',
         ],
-            function () {
-                return Company::pluck('name', 'id')->toArray();
+            function () use ($adminId) {
+                return AdminCustomerHelper::getCompanyOptions($adminId);
             },
             function ($value) {
                 $this->crud->addClause('where', 'company_id', $value);

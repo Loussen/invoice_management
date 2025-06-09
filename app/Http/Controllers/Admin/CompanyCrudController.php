@@ -159,7 +159,7 @@ class CompanyCrudController extends CrudController
         CRUD::addFilter(
             [
                 'type' => 'text',
-                'label' => 'Name',
+                'label' => 'Company name',
                 'name' => 'name',
             ],
             false,
