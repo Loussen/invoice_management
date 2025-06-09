@@ -62,8 +62,8 @@ class AdminCustomerHelper
 
     public static function getCompanyOptions($adminId,$type='filter')
     {
-        $admin = Admin::find($adminId);
-        if ($admin && $admin->hasRole('super-admin')) {
+        $admin = User::find($adminId);
+        if ($admin && $admin->hasRole('Super Admin')) {
             // Super admin can access all companies
             if($type == 'create') {
                 return Company::all();
@@ -72,10 +72,10 @@ class AdminCustomerHelper
             }
         } else {
             // Get company IDs for the assigned customers
-            $companyIds = DB::table('admin_customer as ac')
-                ->join('customers as c', 'ac.customer_id', '=', 'c.id')
-                ->join('company as co', 'c.id', '=', 'co.customer_id')
-                ->where('ac.admin_id', $adminId)
+            $companyIds = DB::table('user_company as uc')
+                ->join('company as c', 'uc.company_id', '=', 'c.id')
+                ->join('orders as o', 'c.id', '=', 'o.company_id')
+                ->where('uc.user_id', $adminId)
                 ->pluck('co.id');
 
             return $type == 'create' ? Company::whereIn('id', $companyIds)->get() : Company::whereIn('id', $companyIds)->pluck('name', 'id')->toArray();
