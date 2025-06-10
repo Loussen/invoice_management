@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\AdminCustomerHelper;
 use App\Http\Requests\WalletRequest;
+use App\Models\Coin;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -79,6 +82,8 @@ class WalletCrudController extends CrudController
             'type' => 'select_from_array',
             'options' => ['pending' => 'Pending', 'approved' => 'Approved'],
         ]);
+
+        $this->addCustomCrudFilters();
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -158,5 +163,46 @@ class WalletCrudController extends CrudController
     protected function autoSetupShowOperation()
     {
         $this->setupListOperation();
+    }
+
+    protected function addCustomCrudFilters(): void
+    {
+        $adminId = backpack_user()->id;
+
+        CRUD::addFilter([
+            'name' => 'user_id',
+            'type' => 'select2',
+            'label' => 'User',
+        ],
+            function () {
+                return User::pluck('name','id')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'user_id', $value);
+            }
+        );
+
+        CRUD::addFilter([
+            'name' => 'coin_id',
+            'type' => 'select2',
+            'label' => 'Coin',
+        ],
+            function () {
+                return Coin::pluck('name','id')->toArray();
+            },
+            function ($value) {
+                $this->crud->addClause('where', 'coin_id', $value);
+            }
+        );
+
+        CRUD::addFilter([
+            'name'  => 'status',
+            'type'  => 'select2',
+            'label' => 'Status'
+        ], function () {
+            return ['pending' => 'Pending', 'approved' => 'Approved'];
+        }, function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'status', $value);
+        });
     }
 }
