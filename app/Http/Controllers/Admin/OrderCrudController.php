@@ -73,6 +73,8 @@ class OrderCrudController extends CrudController
         CRUD::addColumn([
             'name'        => 'company_id',
             'type'        => 'select2',
+            'model'       => \App\Models\Company::class,
+            'attribute'   => 'name_with_currency',
             'allows_null' => true,
         ]);
         CRUD::addColumn([
