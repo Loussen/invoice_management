@@ -31,6 +31,13 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function addIdPassportButton()
+    {
+        return '<a href="'.url('admin/your-model/'.$this->id.'/edit').'" class="btn btn-sm btn-primary">
+                Add ID passport and receipt
+            </a>';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

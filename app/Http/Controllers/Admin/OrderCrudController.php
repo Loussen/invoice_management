@@ -64,6 +64,12 @@ class OrderCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (!backpack_user()->hasRole('Super Admin')) {
+            $this->crud->removeButton('update');
+
+            $this->crud->addButtonFromModelFunction('line', 'custom_update', 'addIdPassportButton', 'beginning');
+        }
+
         CRUD::addColumn([
             'name'        => 'company_id',
             'type'        => 'select2',
