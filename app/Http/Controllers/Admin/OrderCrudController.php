@@ -76,7 +76,7 @@ class OrderCrudController extends CrudController
             'allows_null' => true,
         ]);
         CRUD::column('transaction_number');
-        CRUD::column('amount')->type('number');
+        CRUD::column('amount');
         CRUD::column('payeer_name');
         CRUD::addColumn([
             'name' => 'detail_document',

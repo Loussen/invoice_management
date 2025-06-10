@@ -59,6 +59,11 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getAmountWithCurrencyAttribute()
+    {
+        return $this->amount . ' ' . ($this->currency ?? 'USD');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
