@@ -33,9 +33,11 @@ class Order extends Model
 
     public function addIdPassportButton()
     {
-        return '<a href="'.url('admin/your-model/'.$this->id.'/edit').'" class="btn btn-sm btn-primary">
-                Add ID passport and receipt
-            </a>';
+        $url = backpack_url('order/'.$this->id.'/edit');
+
+        return '<a href="'.$url.'" class="btn btn-primary">
+            Add ID passport and receipt
+        </a>';
     }
 
     /*
@@ -68,7 +70,7 @@ class Order extends Model
 
     public function getAmountWithCurrencyAttribute()
     {
-        return $this->amount . ' ' . ($this->currency->symbol ?? '$');
+        return $this->amount . ' ' . ($this->company->currency->symbol ?? '$');
     }
 
     /*

@@ -67,7 +67,7 @@ class OrderCrudController extends CrudController
         if (!backpack_user()->hasRole('Super Admin')) {
             $this->crud->removeButton('update');
 
-            $this->crud->addButtonFromModelFunction('line', 'custom_update', 'addIdPassportButton', 'beginning');
+            $this->crud->addButtonFromModelFunction('line', 'custom_update', 'addIdPassportButton', 'end');
         }
 
         CRUD::addColumn([
@@ -130,13 +130,6 @@ class OrderCrudController extends CrudController
         ]);
         CRUD::field('transaction_number')->wrapper(['class' => 'form-group col-md-2']);
         CRUD::field('amount')->type('number')->wrapper(['class' => 'form-group col-md-2']);
-        CRUD::addField([
-            'name'        => 'currency_id',
-            'type'        => 'select2',
-            'allows_null' => true,
-            'attribute'   => 'full_name',
-            'wrapper'     => ['class' => 'form-group col-md-2']
-        ]);
         CRUD::field('payeer_name')->wrapper(['class' => 'form-group col-md-2']);
         CRUD::addField([
             'name' => 'detail_document',
