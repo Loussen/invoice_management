@@ -76,12 +76,19 @@ class OrderCrudController extends CrudController
             'allows_null' => true,
         ]);
         CRUD::column('transaction_number');
-        CRUD::column('amount');
+        CRUD::column('amount_with_currency');
         CRUD::column('payeer_name');
         CRUD::addColumn([
             'name' => 'detail_document',
             'type' => 'dropzone',
             'disk' => 'order_detail_document',
+            'withFiles'    => true,
+        ]);
+        CRUD::column('id_passport');
+        CRUD::addColumn([
+            'name' => 'receipt',
+            'type' => 'dropzone',
+            'disk' => 'order_user_receipt',
             'withFiles'    => true,
         ]);
 
@@ -146,7 +153,17 @@ class OrderCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        if(backpack_user()->hasRole('Super Admin')) {
+            $this->setupCreateOperation();
+        } else {
+            CRUD::field('id_passport')->wrapper(['class' => 'form-group col-md-6']);
+            CRUD::addField([
+                'name' => 'receipt',
+                'type' => 'dropzone',
+                'disk' => 'order_user_receipt',
+                'withFiles'    => true,
+            ]);
+        }
     }
 
     protected function autoSetupShowOperation()
