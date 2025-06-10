@@ -42,6 +42,11 @@ class Order extends Model
         return $this->belongsTo('App\Models\Company','company_id','id');
     }
 
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\Currency','currency_id','id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
