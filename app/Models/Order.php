@@ -35,7 +35,7 @@ class Order extends Model
     {
         $url = backpack_url('order/'.$this->id.'/edit');
 
-        return '<a href="'.$url.'" class="btn btn-primary">
+        return '<a href="'.$url.'" class="btn btn-sm btn-primary">
             Add or Edit ID passport and receipt
         </a>';
     }
