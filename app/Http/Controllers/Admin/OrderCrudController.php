@@ -53,7 +53,7 @@ class OrderCrudController extends CrudController
 
         $adminId = backpack_user()->id;
 
-        AdminCustomerHelper::applyAdminCustomerFilter($this->crud->query, $adminId);
+        AdminCustomerHelper::applyAdminOrderFilter($this->crud->query, $adminId);
     }
 
     /**

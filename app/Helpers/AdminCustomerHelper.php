@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class AdminCustomerHelper
 {
-    public static function applyAdminCustomerFilter(Builder $query, $adminId, $companyColumn = 'id'): Builder
+    public static function applyAdminCompanyFilter(Builder $query, $adminId, $companyColumn = 'id'): Builder
     {
         if (self::isSuperAdmin($adminId)) {
             return $query;
@@ -32,7 +32,7 @@ class AdminCustomerHelper
         return $admin && $admin->hasRole('Super Admin');
     }
 
-    public static function applyAdminCompanyFilter(Builder $query, $adminId, $companyColumn = 'company_id'): Builder
+    public static function applyAdminOrderFilter(Builder $query, $adminId, $companyColumn = 'company_id'): Builder
     {
         if (self::isSuperAdmin($adminId)) {
             return $query;
