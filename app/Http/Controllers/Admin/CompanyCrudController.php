@@ -66,7 +66,7 @@ class CompanyCrudController extends CrudController
     {
         CRUD::column('name')->label('Company name');
         CRUD::column('iban')->label('IBAN');
-        CRUD::column('address')->label('Company address');
+        CRUD::column('address')->type('textarea')->label('Company address');
         CRUD::column('swift')->label('SWIFT / BIC');
         CRUD::column('bank_name');
         CRUD::column('country');
@@ -80,7 +80,7 @@ class CompanyCrudController extends CrudController
         CRUD::column('monthly_limit')->type('number');
         CRUD::column('daily_limit')->type('number');
         CRUD::column('max_limit')->label('1 Transaction Max Limit')->type('number');
-        CRUD::column('bank_address');
+        CRUD::column('bank_address')->type('textarea');
         CRUD::addColumn([
             'name'        => 'currency_id',
             'type'        => 'select2',

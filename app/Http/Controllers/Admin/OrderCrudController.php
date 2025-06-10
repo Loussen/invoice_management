@@ -162,6 +162,9 @@ class OrderCrudController extends CrudController
                 'type' => 'dropzone',
                 'disk' => 'order_user_receipt',
                 'withFiles'    => true,
+                'wrapper' => [
+                    'class' => 'form-group col-md-6'
+                ]
             ]);
         }
     }
