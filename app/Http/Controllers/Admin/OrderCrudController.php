@@ -119,7 +119,7 @@ class OrderCrudController extends CrudController
             'name'        => 'company_id',
             'type'        => 'select2',
             'allows_null' => true,
-            'wrapper'     => ['class' => 'form-group col-md-2']
+            'wrapper'     => ['class' => 'form-group col-md-3']
         ]);
         CRUD::addField([
             'name' => 'status',
@@ -130,7 +130,7 @@ class OrderCrudController extends CrudController
         ]);
         CRUD::field('transaction_number')->wrapper(['class' => 'form-group col-md-2']);
         CRUD::field('amount')->type('number')->wrapper(['class' => 'form-group col-md-2']);
-        CRUD::field('payeer_name')->wrapper(['class' => 'form-group col-md-2']);
+        CRUD::field('payeer_name')->wrapper(['class' => 'form-group col-md-3']);
         CRUD::addField([
             'name' => 'detail_document',
             'type' => 'dropzone',
@@ -155,7 +155,7 @@ class OrderCrudController extends CrudController
         if(backpack_user()->hasRole('Super Admin')) {
             $this->setupCreateOperation();
         } else {
-            CRUD::field('id_passport')->wrapper(['class' => 'form-group col-md-6']);
+            CRUD::field('id_passport')->label('ID Passport')->wrapper(['class' => 'form-group col-md-6']);
             CRUD::addField([
                 'name' => 'receipt',
                 'type' => 'dropzone',
