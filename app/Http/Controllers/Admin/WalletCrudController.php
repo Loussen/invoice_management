@@ -167,20 +167,20 @@ class WalletCrudController extends CrudController
 
     protected function addCustomCrudFilters(): void
     {
-        $adminId = backpack_user()->id;
-
-        CRUD::addFilter([
-            'name' => 'user_id',
-            'type' => 'select2',
-            'label' => 'User',
-        ],
-            function () {
-                return User::pluck('name','id')->toArray();
-            },
-            function ($value) {
-                $this->crud->addClause('where', 'user_id', $value);
-            }
-        );
+        if (backpack_user()->hasRole('Super Admin')) {
+            CRUD::addFilter([
+                'name' => 'user_id',
+                'type' => 'select2',
+                'label' => 'User',
+            ],
+                function () {
+                    return User::pluck('name', 'id')->toArray();
+                },
+                function ($value) {
+                    $this->crud->addClause('where', 'user_id', $value);
+                }
+            );
+        }
 
         CRUD::addFilter([
             'name' => 'coin_id',
@@ -188,7 +188,9 @@ class WalletCrudController extends CrudController
             'label' => 'Coin',
         ],
             function () {
-                return Coin::pluck('name','id')->toArray();
+                return \App\Models\Coin::all()->mapWithKeys(function ($coin) {
+                    return [$coin->id => $coin->full_name];
+                })->toArray();
             },
             function ($value) {
                 $this->crud->addClause('where', 'coin_id', $value);
