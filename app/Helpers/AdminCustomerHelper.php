@@ -76,7 +76,7 @@ class AdminCustomerHelper
                 ->join('companies as c', 'uc.company_id', '=', 'c.id')
                 ->join('orders as o', 'c.id', '=', 'o.company_id')
                 ->where('uc.user_id', $adminId)
-                ->pluck('o.id');
+                ->pluck('c.id');
 
             return $type == 'create' ? Company::whereIn('id', $companyIds)->get() : Company::whereIn('id', $companyIds)->pluck('name', 'id')->toArray();
         }
