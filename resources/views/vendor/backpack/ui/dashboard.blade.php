@@ -34,7 +34,7 @@
             $orderAmountSum = \App\Models\Order::sum('amount');
 
             $companyCount = \App\Models\Company::count();
-            $walletCount = \App\Models\Wallet::where('user_id',$adminId)->count();
+            $walletCount = \App\Models\Wallet::count();
             Widget::add()->to('before_content')->type('div')->class('row mt-4')->content([
                 // notice we use Widget::make() to add widgets as content (not in a group)
                 Widget::make()
