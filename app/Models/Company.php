@@ -54,6 +54,11 @@ class Company extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getNameWithCurrencyAttribute()
+    {
+        return $this->name . ' (' . $this->currency . ')';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

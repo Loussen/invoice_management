@@ -118,6 +118,8 @@ class OrderCrudController extends CrudController
         CRUD::addField([
             'name'        => 'company_id',
             'type'        => 'select2',
+            'model'       => \App\Models\Company::class,
+            'attribute'   => 'name_with_currency',
             'allows_null' => true,
             'wrapper'     => ['class' => 'form-group col-md-3']
         ]);
