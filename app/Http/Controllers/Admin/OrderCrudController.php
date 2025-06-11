@@ -66,7 +66,7 @@ class OrderCrudController extends CrudController
     {
         CRUD::disableResponsiveTable();
         CRUD::setPageLengthMenu([[25, 50, 100, 300, 500, 3000, 5000 -1], [25, 50, 100, 300, 500, 3000, 5000, "backpack::crud.all"]]);
-        
+
         if (!backpack_user()->hasRole('Super Admin')) {
             $this->crud->removeButton('update');
 
@@ -82,10 +82,32 @@ class OrderCrudController extends CrudController
         ]);
         CRUD::addColumn([
             'name' => 'status',
-            'type' => 'select_from_array',
-            'options' => ['pending' => 'Pending', 'completed' => 'Completed', 'refund' => 'Refund', 'reject' => 'Reject'],
-            'allows_null' => true,
+            'label' => 'Status',
+            'type' => 'closure',
+            'function' => function($entry) {
+                $statusColors = [
+                    'pending' => 'badge-warning',   // Sarı
+                    'completed' => 'badge-success', // Yaşıl
+                    'refund' => 'badge-primary',    // Göy
+                    'reject' => 'badge-danger',     // Qırmızı
+                ];
+
+                $statusLabels = [
+                    'pending' => 'Pending',
+                    'completed' => 'Completed',
+                    'refund' => 'Refund',
+                    'reject' => 'Reject',
+                ];
+
+                $status = $entry->status;
+                $label = $statusLabels[$status] ?? $status;
+                $color = $statusColors[$status] ?? 'badge-secondary';
+
+                return '<span class="badge ' . $color . '">' . $label . '</span>';
+            },
+            'escaped' => false, // HTML göstərmək üçün false olmalıdır
         ]);
+
         CRUD::column('transaction_number');
         CRUD::column('amount_with_currency');
         CRUD::column('payeer_name');
