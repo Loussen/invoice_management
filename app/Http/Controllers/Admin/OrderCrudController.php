@@ -64,6 +64,9 @@ class OrderCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::disableResponsiveTable();
+        CRUD::setPageLengthMenu([[25, 50, 100, 300, 500, 3000, 5000 -1], [25, 50, 100, 300, 500, 3000, 5000, "backpack::crud.all"]]);
+        
         if (!backpack_user()->hasRole('Super Admin')) {
             $this->crud->removeButton('update');
 
