@@ -66,6 +66,15 @@ class CompanyCrudController extends CrudController
     {
         CRUD::column('name')->label('Company name');
         CRUD::column('iban')->label('IBAN');
+        CRUD::addColumn([
+            'name'        => 'currency_id',
+            'type'        => 'select2',
+            'allows_null' => true,
+            'attribute'   => 'full_name',
+        ]);
+        CRUD::column('monthly_limit')->type('number');
+        CRUD::column('daily_limit')->type('number');
+        CRUD::column('max_limit')->label('1 Transaction Max Limit')->type('number');
         CRUD::column('address')->type('textarea')->label('Company address');
         CRUD::column('swift')->label('SWIFT / BIC');
         CRUD::column('bank_name');
@@ -77,16 +86,7 @@ class CompanyCrudController extends CrudController
             'disk' => 'company_document',
             'withFiles'    => true,
         ]);
-        CRUD::column('monthly_limit')->type('number');
-        CRUD::column('daily_limit')->type('number');
-        CRUD::column('max_limit')->label('1 Transaction Max Limit')->type('number');
         CRUD::column('bank_address')->type('textarea');
-        CRUD::addColumn([
-            'name'        => 'currency_id',
-            'type'        => 'select2',
-            'allows_null' => true,
-            'attribute'   => 'full_name',
-        ]);
 
         $this->addCustomCrudFilters();
 
