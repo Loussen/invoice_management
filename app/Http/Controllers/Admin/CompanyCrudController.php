@@ -64,6 +64,8 @@ class CompanyCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::disableResponsiveTable();
+        CRUD::setPageLengthMenu([[25, 50, 100, 300, 500, 3000, 5000 -1], [25, 50, 100, 300, 500, 3000, 5000, "backpack::crud.all"]]);
         CRUD::column('name')->label('Company name');
         CRUD::column('iban')->label('IBAN');
         CRUD::addColumn([
