@@ -85,14 +85,14 @@ class OrderCrudController extends CrudController
             'label' => 'Status',
             'type' => 'closure',
             'function' => function($entry) {
-                $statusColors = [
-                    'pending' => 'badge-warning',   // Sarı
-                    'completed' => 'badge-success', // Yaşıl
-                    'refund' => 'badge-primary',    // Göy
-                    'reject' => 'badge-danger',     // Qırmızı
+                $colors = [
+                    'pending' => '#ffc107',    // Sarı
+                    'completed' => '#28a745',  // Yaşıl
+                    'refund' => '#007bff',     // Göy
+                    'reject' => '#dc3545',     // Qırmızı
                 ];
 
-                $statusLabels = [
+                $labels = [
                     'pending' => 'Pending',
                     'completed' => 'Completed',
                     'refund' => 'Refund',
@@ -100,13 +100,14 @@ class OrderCrudController extends CrudController
                 ];
 
                 $status = $entry->status;
-                $label = $statusLabels[$status] ?? $status;
-                $color = $statusColors[$status] ?? 'badge-secondary';
+                $label = $labels[$status] ?? $status;
+                $color = $colors[$status] ?? '#6c757d'; // Default: boz
 
-                return '<span class="badge ' . $color . '">' . $label . '</span>';
+                return '<span style="color: white; background-color: ' . $color . '; padding: 4px 8px; border-radius: 4px;">' . $label . '</span>';
             },
-            'escaped' => false, // HTML göstərmək üçün false olmalıdır
+            'escaped' => false, // HTML render etmək üçün false olmalıdır
         ]);
+
 
         CRUD::column('transaction_number');
         CRUD::column('amount_with_currency');

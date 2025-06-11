@@ -53,6 +53,11 @@ class Currency extends Model
         return $this->attributes['code']. " - " . $this->attributes['name']. " - " . $this->attributes['symbol'];
     }
 
+    public function getSymbolNameAttribute(): string
+    {
+        return $this->attributes['name']. " - " . $this->attributes['symbol'];
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

@@ -72,7 +72,7 @@ class CompanyCrudController extends CrudController
             'name'        => 'currency_id',
             'type'        => 'select2',
             'allows_null' => true,
-            'attribute'   => 'full_name',
+            'attribute'   => 'symbol_name',
         ]);
         CRUD::column('monthly_limit')->type('number');
         CRUD::column('daily_limit')->type('number');
