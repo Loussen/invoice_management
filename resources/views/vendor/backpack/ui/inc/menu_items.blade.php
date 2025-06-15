@@ -2,10 +2,10 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i class="la la-home nav-icon"></i> Home</a></li>
 
 @if(backpack_user()->hasPermissionTo('company list'))
-    <x-backpack::menu-item title="Companies" icon="la la-landmark" :link="backpack_url('company')" />
+    <x-backpack::menu-item title="Company" icon="la la-landmark" :link="backpack_url('company')" />
 @endif
 @if(backpack_user()->hasPermissionTo('currency list'))
-    <x-backpack::menu-item title="Currencies" icon="la la-euro-sign" :link="backpack_url('currency')" />
+    <x-backpack::menu-item title="Currency" icon="la la-euro-sign" :link="backpack_url('currency')" />
 @endif
 
 @if(backpack_user()->hasPermissionTo('order list'))

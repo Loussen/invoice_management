@@ -33,7 +33,7 @@ class CompanyCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Company::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/company');
-        CRUD::setEntityNameStrings('company', 'companies');
+        CRUD::setEntityNameStrings('company', 'company');
 
         if (!backpack_user()->can('company list')) {
             CRUD::denyAccess(['list', 'show']);
@@ -89,6 +89,29 @@ class CompanyCrudController extends CrudController
             'withFiles'    => true,
         ]);
         CRUD::column('bank_address')->type('textarea');
+        CRUD::addColumn([
+            'name' => 'status',
+            'label' => 'Status',
+            'type' => 'closure',
+            'function' => function($entry) {
+                $colors = [
+                    'active' => '#28a745',
+                    'deactivated' => '#dc3545',
+                ];
+
+                $labels = [
+                    'active' => 'Active',
+                    'deactivated' => 'Deactivated',
+                ];
+
+                $status = $entry->status;
+                $label = $labels[$status] ?? $status;
+                $color = $colors[$status] ?? '#6c757d';
+
+                return '<span style="color: white; background-color: ' . $color . '; padding: 4px 8px; border-radius: 4px;">' . $label . '</span>';
+            },
+            'escaped' => false,
+        ]);
 
         $this->addCustomCrudFilters();
 
@@ -123,13 +146,20 @@ class CompanyCrudController extends CrudController
         CRUD::field('monthly_limit')->type('number')->wrapper(['class' => 'form-group col-md-4']);
         CRUD::field('daily_limit')->type('number')->wrapper(['class' => 'form-group col-md-4']);
         CRUD::field('max_limit')->label('1 Transaction Max Limit')->type('number')->wrapper(['class' => 'form-group col-md-4']);
-        CRUD::field('bank_address')->wrapper(['class' => 'form-group col-md-6']);
+        CRUD::field('bank_address')->wrapper(['class' => 'form-group col-md-4']);
         CRUD::addField([
             'name'        => 'currency_id',
             'type'        => 'select2',
             'allows_null' => true,
             'attribute'   => 'full_name',
-            'wrapper'     => ['class' => 'form-group col-md-6']
+            'wrapper'     => ['class' => 'form-group col-md-4']
+        ]);
+        CRUD::addField([
+            'name' => 'status',
+            'type' => 'select_from_array',
+            'options' => ['active' => 'Active', 'deactivated' => 'Deactivated'],
+            'allows_null' => true,
+            'wrapper' => ['class' => 'form-group col-md-4']
         ]);
 
         /**

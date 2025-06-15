@@ -86,10 +86,10 @@ class OrderCrudController extends CrudController
             'type' => 'closure',
             'function' => function($entry) {
                 $colors = [
-                    'pending' => '#ffc107',    // Sarı
-                    'completed' => '#28a745',  // Yaşıl
-                    'refund' => '#007bff',     // Göy
-                    'reject' => '#dc3545',     // Qırmızı
+                    'pending' => '#ffc107',
+                    'completed' => '#28a745',
+                    'refund' => '#007bff',
+                    'reject' => '#dc3545',
                 ];
 
                 $labels = [
@@ -101,11 +101,11 @@ class OrderCrudController extends CrudController
 
                 $status = $entry->status;
                 $label = $labels[$status] ?? $status;
-                $color = $colors[$status] ?? '#6c757d'; // Default: boz
+                $color = $colors[$status] ?? '#6c757d';
 
                 return '<span style="color: white; background-color: ' . $color . '; padding: 4px 8px; border-radius: 4px;">' . $label . '</span>';
             },
-            'escaped' => false, // HTML render etmək üçün false olmalıdır
+            'escaped' => false,
         ]);
 
 

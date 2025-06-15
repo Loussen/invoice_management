@@ -21,7 +21,9 @@ class AdminCustomerHelper
 
         return $query->whereIn($companyColumn, function ($subQuery) use ($adminId) {
             $subQuery->select('company_id')
+                ->join('companies', 'user_company.company_id', '=', 'companies.id')
                 ->from('user_company')
+                ->where('companies.status', 'active')
                 ->where('user_id', $adminId);
         });
     }
@@ -39,7 +41,9 @@ class AdminCustomerHelper
         }
 
         $companyIds = DB::table('user_company')
+            ->join('companies', 'user_company.company_id', '=', 'companies.id')
             ->where('user_id', $adminId)
+            ->where('companies.status', 'active')
             ->pluck('company_id');
 
         return $query->whereIn($companyColumn, $companyIds);
@@ -74,6 +78,7 @@ class AdminCustomerHelper
             // Get company IDs for the assigned customers
             $companyIds = DB::table('user_company as uc')
                 ->join('companies as c', 'uc.company_id', '=', 'c.id')
+                ->where('c.status', 'active')
                 ->where('uc.user_id', $adminId)
                 ->pluck('c.id');
 
