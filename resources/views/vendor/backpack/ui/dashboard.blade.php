@@ -44,6 +44,7 @@
 
             $companyCount = \App\Models\Company::count();
             $walletCount = \App\Models\Wallet::count();
+            $orderAmountCompletedCount = \App\Models\Order::where('status', 'completed')->count();
             Widget::add()->to('before_content')->type('div')->class('row mt-4')->content([
                 // notice we use Widget::make() to add widgets as content (not in a group)
                 Widget::make()
@@ -54,7 +55,8 @@
                     ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                     ->progressClass('progress-bar')
                     ->value($orderCount.' orders')
-                    ->description('Orders count'),
+                    ->description('Orders count')
+                    ->hint('<a href='.backpack_url('order').'>Order List</a>'),
                 // alternatively, to use widgets as content, we can use the same add() method,
                 // but we need to use onlyHere() or remove() at the end
                 Widget::make()
@@ -65,7 +67,8 @@
                     ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                     ->progressClass('progress-bar')
                     ->value($companyCount.' company')
-                    ->description('Company count'),
+                    ->description('Company count')
+                    ->hint('<a href='.backpack_url('company').'>Company List</a>'),
                 // alternatively, you can just push the widget to a "hidden" group
                 Widget::make()
                     ->type('progress')
@@ -75,7 +78,8 @@
                     ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                     ->progressClass('progress-bar')
                     ->value($orderAmountSum)
-                    ->description('Wallet Balance'),
+                    ->description('Wallet Balance')
+                    ->hint('Completed order count: '.$orderAmountCompletedCount),
                 Widget::make()
                     ->type('progress')
                     ->class('card mb-4')
@@ -84,7 +88,8 @@
                     ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                     ->progressClass('progress-bar')
                     ->value($walletCount)
-                    ->description('Wallet Count'),
+                    ->description('Wallet Count')
+                    ->hint('<a href='.backpack_url('wallet').'>Wallet List</a>'),
                 Widget::make()
                     ->type('progress')
                     ->class('card mb-4')
@@ -127,6 +132,7 @@
 
                 $companyCount = $companyIds->count();
                 $walletCount = \App\Models\Wallet::where('user_id',$adminId)->count();
+                $orderAmountCompletedCount = \App\Models\Order::where('status', 'completed')->whereIn('company_id', $companyIds)->count();
 
                 Widget::add()->to('before_content')->type('div')->class('row mt-4')->content([
                     // notice we use Widget::make() to add widgets as content (not in a group)
@@ -138,7 +144,8 @@
                         ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                         ->progressClass('progress-bar')
                         ->value($orderCount.' orders')
-                        ->description('Orders count'),
+                        ->description('Orders count')
+                        ->hint('<a href='.backpack_url('order').'>Order List</a>'),
                     // alternatively, to use widgets as content, we can use the same add() method,
                     // but we need to use onlyHere() or remove() at the end
                     Widget::make()
@@ -149,7 +156,8 @@
                         ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                         ->progressClass('progress-bar')
                         ->value($companyCount.' company')
-                        ->description('Company count'),
+                        ->description('Company count')
+                        ->hint('<a href='.backpack_url('company').'>Company List</a>'),
                     // alternatively, you can just push the widget to a "hidden" group
                     Widget::make()
                         ->type('progress')
@@ -159,7 +167,8 @@
                         ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                         ->progressClass('progress-bar')
                         ->value($orderAmountSumAfterCommission)
-                        ->description('Wallet Balance'),
+                        ->description('Wallet Balance')
+                        ->hint('Completed order count: '.$orderAmountCompletedCount),
                     Widget::make()
                         ->type('progress')
                         ->class('card mb-4')
@@ -168,7 +177,8 @@
                         ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
                         ->progressClass('progress-bar')
                         ->value($walletCount)
-                        ->description('Wallet Count'),
+                        ->description('Wallet Count')
+                        ->hint('<a href='.backpack_url('wallet').'>Wallet List</a>'),
                     Widget::make()
                         ->type('progress')
                         ->class('card mb-4')
