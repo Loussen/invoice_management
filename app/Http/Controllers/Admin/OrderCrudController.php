@@ -64,8 +64,12 @@ class OrderCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $adminId = backpack_user()->id;
+
+        AdminCustomerHelper::applyAdminOrderFilter($this->crud->query, $adminId);
+
         CRUD::disableResponsiveTable();
-        CRUD::setPageLengthMenu([[25, 50, 100, 300, 500, 3000, 5000 -1], [25, 50, 100, 300, 500, 3000, 5000, "backpack::crud.all"]]);
+        CRUD::setPageLengthMenu([[25, 50, 100, 300, -1], [25, 50, 100, 300, "backpack::crud.all"]]);
 
         if (!backpack_user()->hasRole('Super Admin')) {
             $this->crud->removeButton('update');
@@ -125,6 +129,7 @@ class OrderCrudController extends CrudController
             'disk' => 'order_user_receipt',
             'withFiles'    => true,
         ]);
+        CRUD::column('created_at');
 
         $this->addCustomCrudFilters();
 

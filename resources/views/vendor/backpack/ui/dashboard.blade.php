@@ -31,7 +31,16 @@
         if($admin->hasRole('Super Admin')) {
             $orderCount = \App\Models\Order::count();
 
-            $orderAmountSum = \App\Models\Order::sum('amount');
+            $orderAmountSum = \App\Models\Order::where('status', 'completed')->sum('amount');
+            $orderAmountSum = number_format($orderAmountSum);
+
+            $orderAmountRejectSum = \App\Models\Order::where('status', 'reject')->sum('amount');
+            $orderAmountRejectSum = number_format($orderAmountRejectSum);
+            $orderAmountRejectCount = \App\Models\Order::where('status', 'reject')->count();
+
+            $orderAmountPendingSum = \App\Models\Order::where('status', 'pending')->sum('amount');
+            $orderAmountPendingSum = number_format($orderAmountPendingSum);
+            $orderAmountPendingCount = \App\Models\Order::where('status', 'pending')->count();
 
             $companyCount = \App\Models\Company::count();
             $walletCount = \App\Models\Wallet::count();
@@ -76,6 +85,26 @@
                     ->progressClass('progress-bar')
                     ->value($walletCount)
                     ->description('Wallet Count'),
+                Widget::make()
+                    ->type('progress')
+                    ->class('card mb-4')
+                    ->statusBorder('start') // start|top|bottom
+                    ->accentColor('primary') // primary|secondary|warning|danger|info
+                    ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                    ->progressClass('progress-bar')
+                    ->value($orderAmountRejectSum)
+                    ->description('Rejected order')
+                    ->hint('Rejected order count: '.$orderAmountRejectCount),
+                Widget::make()
+                    ->type('progress')
+                    ->class('card mb-4')
+                    ->statusBorder('start') // start|top|bottom
+                    ->accentColor('primary') // primary|secondary|warning|danger|info
+                    ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                    ->progressClass('progress-bar')
+                    ->value($orderAmountPendingSum)
+                    ->description('Pending order')
+                    ->hint('Pending order count: '.$orderAmountPendingCount)
             ]);
         } else {
             $companyIds = $admin->companies()->pluck('companies.id');
@@ -83,9 +112,18 @@
             if($companyIds->isNotEmpty()) {
                 $orderCount = \App\Models\Order::whereIn('company_id', $companyIds)->count();
 
-                $orderAmountSum = \App\Models\Order::whereIn('company_id', $companyIds)->sum('amount');
+                $orderAmountSum = \App\Models\Order::where('status', 'completed')->whereIn('company_id', $companyIds)->sum('amount');
                 $commissionRate = $admin->commission / 100;
                 $orderAmountSumAfterCommission = $orderAmountSum * (1 - $commissionRate);
+                $orderAmountSumAfterCommission = number_format($orderAmountSumAfterCommission);
+
+                $orderAmountRejectSum = \App\Models\Order::where('status', 'reject')->whereIn('company_id', $companyIds)->sum('amount');
+                $orderAmountRejectSum = number_format($orderAmountRejectSum);
+                $orderAmountRejectCount = \App\Models\Order::where('status', 'reject')->whereIn('company_id', $companyIds)->count();
+
+                $orderAmountPendingSum = \App\Models\Order::where('status', 'pending')->whereIn('company_id', $companyIds)->sum('amount');
+                $orderAmountPendingSum = number_format($orderAmountPendingSum);
+                $orderAmountPendingCount = \App\Models\Order::where('status', 'pending')->whereIn('company_id', $companyIds)->count();
 
                 $companyCount = $companyIds->count();
                 $walletCount = \App\Models\Wallet::where('user_id',$adminId)->count();
@@ -131,6 +169,26 @@
                         ->progressClass('progress-bar')
                         ->value($walletCount)
                         ->description('Wallet Count'),
+                    Widget::make()
+                        ->type('progress')
+                        ->class('card mb-4')
+                        ->statusBorder('start') // start|top|bottom
+                        ->accentColor('primary') // primary|secondary|warning|danger|info
+                        ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                        ->progressClass('progress-bar')
+                        ->value($orderAmountRejectSum)
+                        ->description('Rejected order')
+                        ->hint('Rejected order count: '.$orderAmountRejectCount),
+                    Widget::make()
+                        ->type('progress')
+                        ->class('card mb-4')
+                        ->statusBorder('start') // start|top|bottom
+                        ->accentColor('primary') // primary|secondary|warning|danger|info
+                        ->ribbon(['top', 'la-first-order']) // ['top|right|bottom']
+                        ->progressClass('progress-bar')
+                        ->value($orderAmountPendingSum)
+                        ->description('Pending order')
+                        ->hint('Pending order count: '.$orderAmountPendingCount)
             ]);
             } else {
                 echo "Not yet";
