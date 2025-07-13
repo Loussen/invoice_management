@@ -206,6 +206,31 @@ class OrderCrudController extends CrudController
     protected function autoSetupShowOperation()
     {
         $this->setupListOperation();
+
+        CRUD::addColumn([
+            'name' => 'status_logs_table',
+            'label' => 'Status Changes',
+            'type' => 'table',
+            'columns' => [
+                'old_status' => 'Old Status',
+                'new_status' => 'New Status',
+                'changed_by' => 'Changed By',
+                'date'       => 'Changed At',
+            ],
+            'escaped' => false,
+            'value' => function($entry) {
+                return $entry->statusLogs
+                    ->sortByDesc('created_at')
+                    ->map(function($log) {
+                        return [
+                            'old_status' => $log->old_status,
+                            'new_status' => $log->new_status,
+                            'changed_by' => optional($log->user)->name ?? 'System', // user adı və ya "System"
+                            'date'       => $log->created_at->format('Y-m-d H:i:s'),
+                        ];
+                    })->toArray();
+            },
+        ]);
     }
 
     protected function addCustomCrudFilters(): void

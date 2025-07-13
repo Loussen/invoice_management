@@ -56,6 +56,11 @@ class Order extends Model
         return $this->belongsTo('App\Models\Currency','currency_id','id');
     }
 
+    public function statusLogs()
+    {
+        return $this->hasMany(OrderStatusLog::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
