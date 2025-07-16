@@ -222,11 +222,13 @@ class OrderCrudController extends CrudController
                 return $entry->statusLogs
                     ->sortByDesc('created_at')
                     ->map(function($log) {
+                        $timezone = optional($log->order->company->timezone)->code ?? 'UTC';
+
                         return [
                             'old_status' => $log->old_status,
                             'new_status' => $log->new_status,
                             'changed_by' => optional($log->user)->name ?? 'System', // user adı və ya "System"
-                            'date'       => $log->created_at->format('Y-m-d H:i:s'),
+                            'date'       => $log->created_at->timezone($timezone)->format('Y-m-d H:i:s'),
                         ];
                     })->toArray();
             },

@@ -90,6 +90,12 @@ class CompanyCrudController extends CrudController
         ]);
         CRUD::column('bank_address')->type('textarea');
         CRUD::addColumn([
+            'name'        => 'timezone_id',
+            'type'        => 'select2',
+            'allows_null' => true,
+            'attribute'   => 'code_name',
+        ]);
+        CRUD::addColumn([
             'name' => 'status',
             'label' => 'Status',
             'type' => 'closure',
@@ -146,20 +152,27 @@ class CompanyCrudController extends CrudController
         CRUD::field('monthly_limit')->type('number')->wrapper(['class' => 'form-group col-md-4']);
         CRUD::field('daily_limit')->type('number')->wrapper(['class' => 'form-group col-md-4']);
         CRUD::field('max_limit')->label('1 Transaction Max Limit')->type('number')->wrapper(['class' => 'form-group col-md-4']);
-        CRUD::field('bank_address')->wrapper(['class' => 'form-group col-md-4']);
+        CRUD::field('bank_address')->wrapper(['class' => 'form-group col-md-3']);
         CRUD::addField([
             'name'        => 'currency_id',
             'type'        => 'select2',
             'allows_null' => true,
             'attribute'   => 'full_name',
-            'wrapper'     => ['class' => 'form-group col-md-4']
+            'wrapper'     => ['class' => 'form-group col-md-3']
+        ]);
+        CRUD::addField([
+            'name'        => 'timezone_id',
+            'type'        => 'select2',
+            'allows_null' => true,
+            'attribute'   => 'code_name',
+            'wrapper'     => ['class' => 'form-group col-md-3']
         ]);
         CRUD::addField([
             'name' => 'status',
             'type' => 'select_from_array',
             'options' => ['active' => 'Active', 'deactivated' => 'Deactivated'],
             'allows_null' => true,
-            'wrapper' => ['class' => 'form-group col-md-4']
+            'wrapper' => ['class' => 'form-group col-md-3']
         ]);
 
         /**
