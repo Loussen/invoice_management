@@ -207,6 +207,13 @@ class OrderCrudController extends CrudController
     {
         $this->setupListOperation();
 
+        $colors = [
+            'pending'   => '#ffc107', // sarı
+            'completed' => '#28a745', // yaşıl
+            'refund'    => '#007bff', // mavi
+            'reject'    => '#dc3545', // qırmızı
+        ];
+
         CRUD::addColumn([
             'name' => 'status_logs_table',
             'label' => 'Status Changes',
@@ -217,22 +224,26 @@ class OrderCrudController extends CrudController
                 'changed_by' => 'Changed By',
                 'date'       => 'Changed At',
             ],
-            'escaped' => false,
-            'value' => function($entry) {
+            'escaped' => false, // HTML göstərsin
+            'value' => function($entry) use ($colors) {
                 return $entry->statusLogs
                     ->sortByDesc('created_at')
-                    ->map(function($log) {
+                    ->map(function($log) use ($colors) {
                         $timezone = optional($log->order->company->timezone)->code ?? 'UTC';
 
+                        $oldColor = $colors[$log->old_status] ?? '#6c757d'; // default boz
+                        $newColor = $colors[$log->new_status] ?? '#6c757d';
+
                         return [
-                            'old_status' => $log->old_status,
-                            'new_status' => $log->new_status,
-                            'changed_by' => optional($log->user)->name ?? 'System', // user adı və ya "System"
+                            'old_status' => "<span style='color: #fff; background-color: {$oldColor}; padding: 2px 6px; border-radius: 4px;'>{$log->old_status}</span>",
+                            'new_status' => "<span style='color: #fff; background-color: {$newColor}; padding: 2px 6px; border-radius: 4px;'>{$log->new_status}</span>",
+                            'changed_by' => optional($log->user)->name ?? 'System',
                             'date'       => $log->created_at->timezone($timezone)->format('Y-m-d H:i:s'),
                         ];
                     })->toArray();
             },
         ]);
+
     }
 
     protected function addCustomCrudFilters(): void
